@@ -1,29 +1,32 @@
-const express = require('express');
-const morgan = require('morgan');
-const helmet = require('helmet');
-const mongoSanitize = require('express-mongo-sanitize');
-const xssClean = require('xss-clean');
-const hpp = require('hpp');
-const cors = require('cors');
-const compression = require('compression');
-const AppError = require('./utils/appError');
+const express = require("express");
+const morgan = require("morgan");
+const helmet = require("helmet");
+const mongoSanitize = require("express-mongo-sanitize");
+const xssClean = require("xss-clean");
+const hpp = require("hpp");
+const cors = require("cors");
+const compression = require("compression");
+const AppError = require("./utils/appError");
+const globalErrorHandler = require("./controllers/errorController");
 
 const app = express();
 
 //Enable outsource proxies
-app.set('trust proxy', true);
+app.set("trust proxy", true);
 
 //Allow cors for all domains
-app.use(cors({
+app.use(
+  cors({
     credentials: true,
-    origin: '*'
-}));
+    origin: "*",
+  })
+);
 
 //Set security http headers
 app.use(helmet());
 
 //Use morgan logger in the develpment
-if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
+if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 
 //We used the webhook checkout here, because it needs a body of type raw not JSON
 // app.post('/webhook-checkout',
@@ -41,28 +44,29 @@ app.use(mongoSanitize());
 app.use(xssClean());
 
 //Prevent parameter pollution
-app.use(hpp({
+app.use(
+  hpp({
     whitelist: [
-        'duration',
-        'ratingsAverage',
-        'ratingsQuantity',
-        'difficulty',
-        'price',
-        'maxGroupSize'
-    ]
-}));
+      "duration",
+      "ratingsAverage",
+      "ratingsQuantity",
+      "difficulty",
+      "price",
+      "maxGroupSize",
+    ],
+  })
+);
 
 //Compress all text sent in the response to the client
-if (process.env.NODE_ENV === 'production') {
-    app.use(compression());
+if (process.env.NODE_ENV === "production") {
+  app.use(compression());
 }
 
 //Global resources
 
-
 // Handle requests from wrong urls
-app.all('*', (req, res, next) => {
-    next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+app.all("*", (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
 //Using global error handling middleware
