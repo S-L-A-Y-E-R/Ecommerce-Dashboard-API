@@ -5,9 +5,12 @@ const {
   getOneCategory,
   updateCategory,
   deleteCategory,
+  getEmptyCategory,
 } = require("../controllers/categoryController");
 
 const router = express.Router();
+
+router.get("/new", getEmptyCategory);
 
 router
   .route("/:id")

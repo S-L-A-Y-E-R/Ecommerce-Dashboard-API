@@ -5,9 +5,12 @@ const {
   getOneBillboard,
   updateBillboard,
   deleteBillboard,
+  getEmptyBillboard,
 } = require("../controllers/billboardController");
 
 const router = express.Router();
+
+router.get("/new", getEmptyBillboard);
 
 router
   .route("/:id")

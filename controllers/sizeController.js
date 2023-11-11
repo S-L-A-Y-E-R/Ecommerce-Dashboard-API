@@ -6,6 +6,7 @@ const {
   updateOne,
   deleteOne,
 } = require("./factoryHandler");
+const catchAsync = require("../utils/catchAsync");
 
 exports.createSize = createOne(Size);
 
@@ -16,3 +17,10 @@ exports.getOneSize = getOne(Size);
 exports.updateSize = updateOne(Size);
 
 exports.deleteSize = deleteOne(Size);
+
+exports.getEmptySize = catchAsync(async (req, res, next) => {
+  res.status(200).json({
+    status: "success",
+    data: [],
+  });
+});

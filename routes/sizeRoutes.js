@@ -5,9 +5,12 @@ const {
   getOneSize,
   updateSize,
   deleteSize,
+  getEmptySize,
 } = require("../controllers/sizeController");
 
 const router = express.Router();
+
+router.get("/new", getEmptySize);
 
 router.route("/:id").get(getOneSize).patch(updateSize).delete(deleteSize);
 
