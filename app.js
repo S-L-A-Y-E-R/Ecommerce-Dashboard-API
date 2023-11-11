@@ -8,6 +8,9 @@ const cors = require("cors");
 const compression = require("compression");
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
+const storeRoutes = require("./routes/storeRoutes");
+const billboardRoutes = require("./routes/billboardRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
 
 const app = express();
 
@@ -63,6 +66,9 @@ if (process.env.NODE_ENV === "production") {
 }
 
 //Global resources
+app.use("/api/v1/stores", storeRoutes);
+app.use("/api/v1/billboards", billboardRoutes);
+app.use("/api/v1/categories", categoryRoutes);
 
 // Handle requests from wrong urls
 app.all("*", (req, res, next) => {
