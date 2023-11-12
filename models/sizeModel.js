@@ -26,6 +26,8 @@ const sizeSchema = new mongoose.Schema({
   },
 });
 
+sizeSchema.index({ storeId: 1 });
+
 sizeSchema.pre(/^findOneAndUpdate/, function (next) {
   this._update.updatedAt = Date.now();
   next();

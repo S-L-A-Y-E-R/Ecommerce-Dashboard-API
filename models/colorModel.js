@@ -26,6 +26,8 @@ const colorSchema = new mongoose.Schema({
   },
 });
 
+colorSchema.index({ storeId: 1 });
+
 colorSchema.pre(/^findOneAndUpdate/, function (next) {
   this._update.updatedAt = Date.now();
   next();

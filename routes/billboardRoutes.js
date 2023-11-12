@@ -6,6 +6,7 @@ const {
   updateBillboard,
   deleteBillboard,
   getEmptyBillboard,
+  checkBeforeDelete,
 } = require("../controllers/billboardController");
 
 const router = express.Router();
@@ -16,7 +17,7 @@ router
   .route("/:id")
   .get(getOneBillboard)
   .patch(updateBillboard)
-  .delete(deleteBillboard);
+  .delete(checkBeforeDelete, deleteBillboard);
 
 router.route("/").post(createBillboard).get(getAllBillboards);
 

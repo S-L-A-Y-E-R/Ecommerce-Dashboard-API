@@ -1,27 +1,41 @@
 const mongoose = require("mongoose");
 
-const billboardSchema = new mongoose.Schema({
-  label: {
-    type: String,
-    required: [true, "The billboard must have a label"],
-    trim: true,
+const billboardSchema = new mongoose.Schema(
+  {
+    label: {
+      type: String,
+      required: [true, "The billboard must have a label"],
+      trim: true,
+    },
+    storeId: {
+      type: mongoose.Schema.ObjectId,
+      required: true,
+    },
+    imageUrl: {
+      type: String,
+      required: true,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now(),
+    },
+    updatedAt: {
+      type: Date,
+      default: Date.now(),
+    },
   },
-  storeId: {
-    type: mongoose.Schema.ObjectId,
-    required: true,
-  },
-  imageUrl: {
-    type: String,
-    required: true,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now(),
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now(),
-  },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
+
+billboardSchema.index({ storeId: 1 });
+
+billboardSchema.virtual("categories", {
+  ref: "Category",
+  foreignField: "billboardId",
+  localField: "_id",
 });
 
 billboardSchema.pre(/^findOneAndUpdate/, function (next) {

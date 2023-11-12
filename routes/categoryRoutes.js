@@ -6,6 +6,7 @@ const {
   updateCategory,
   deleteCategory,
   getEmptyCategory,
+  checkBeforeDelete,
 } = require("../controllers/categoryController");
 
 const router = express.Router();
@@ -16,7 +17,7 @@ router
   .route("/:id")
   .get(getOneCategory)
   .patch(updateCategory)
-  .delete(deleteCategory);
+  .delete(checkBeforeDelete, deleteCategory);
 
 router.route("/").post(createCategory).get(getAllCategories);
 

@@ -30,19 +30,18 @@ const productSchema = new mongoose.Schema({
     ref: "Color",
     required: true,
   },
-  images: [
-    {
-      type: mongoose.Schema.ObjectId,
-      ref: "Image",
-      required: true,
-    },
-  ],
-  orderItems: [
-    {
-      type: mongoose.Schema.ObjectId,
-      ref: "OrderItem",
-    },
-  ],
+  images: {
+    type: [String],
+    required: [true, "The product must have at least one image"],
+  },
+  isFeatured: {
+    type: Boolean,
+    default: false,
+  },
+  isArchived: {
+    type: Boolean,
+    default: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
@@ -52,6 +51,8 @@ const productSchema = new mongoose.Schema({
     select: false,
   },
 });
+
+productSchema.index({ storeId: 1 });
 
 productSchema.pre(/^findOneAndUpdate/, function (next) {
   this._update.updatedAt = Date.now();
