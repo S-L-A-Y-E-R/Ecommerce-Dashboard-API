@@ -13,6 +13,8 @@ const billboardRoutes = require("./routes/billboardRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const sizeRoutes = require("./routes/sizeRoutes");
 const colorRoutes = require("./routes/colorRoutes");
+const productRoutes = require("./routes/productRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 
 const app = express();
 
@@ -73,6 +75,8 @@ app.use("/api/v1/billboards", billboardRoutes);
 app.use("/api/v1/categories", categoryRoutes);
 app.use("/api/v1/sizes", sizeRoutes);
 app.use("/api/v1/colors", colorRoutes);
+app.use("/api/v1/products", productRoutes);
+app.use("/api/v1/orders", orderRoutes);
 
 // Handle requests from wrong urls
 app.all("*", (req, res, next) => {
