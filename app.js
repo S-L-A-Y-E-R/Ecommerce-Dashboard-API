@@ -5,6 +5,7 @@ const mongoSanitize = require("express-mongo-sanitize");
 const xssClean = require("xss-clean");
 const hpp = require("hpp");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 const compression = require("compression");
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
@@ -13,6 +14,9 @@ const billboardRoutes = require("./routes/billboardRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const sizeRoutes = require("./routes/sizeRoutes");
 const colorRoutes = require("./routes/colorRoutes");
+const productRoutes = require("./routes/productRoutes");
+const orderRoutes = require("./routes/orderRoutes");
+const { webhookCheckout } = require("./controllers/orderController");
 
 const app = express();
 
@@ -34,10 +38,11 @@ app.use(helmet());
 if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 
 //We used the webhook checkout here, because it needs a body of type raw not JSON
-// app.post('/webhook-checkout',
-//     bodyParser.raw({ type: 'application/json' }),
-//     webhookCheckout
-// );
+app.post(
+  "/webhook-checkout",
+  bodyParser.raw({ type: "application/json" }),
+  webhookCheckout
+);
 
 //Limit data incoming from the request body
 app.use(express.json());
@@ -73,6 +78,8 @@ app.use("/api/v1/billboards", billboardRoutes);
 app.use("/api/v1/categories", categoryRoutes);
 app.use("/api/v1/sizes", sizeRoutes);
 app.use("/api/v1/colors", colorRoutes);
+app.use("/api/v1/products", productRoutes);
+app.use("/api/v1/orders", orderRoutes);
 
 // Handle requests from wrong urls
 app.all("*", (req, res, next) => {

@@ -51,7 +51,7 @@ categorySchema.pre(/^find/, function (next) {
     select: "name",
   }).populate({
     path: "billboardId",
-    select: "label",
+    select: "label imageUrl",
   });
   next();
 });
