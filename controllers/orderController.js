@@ -45,7 +45,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     line_items.push({
       price_data: {
         currency: "usd",
-        unit_amount: product.price * 100,
+        unit_amount: Math.round(product.price * 100),
         product_data: {
           name: product.name,
         },
@@ -67,7 +67,6 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
       orderId: order.id,
     },
   });
-  console.log(session);
 
   res.status(200).json({
     status: "success",
@@ -107,7 +106,6 @@ exports.webhookCheckout = catchAsync(async (req, res, next) => {
   const addressString = addressComponents.filter((c) => c !== null).join(", ");
 
   if (event.type === "checkout.session.completed") {
-    // console.log(session);
     await Order.findByIdAndUpdate(
       session.metadata.orderId,
       {
